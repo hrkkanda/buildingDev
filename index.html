@@ -1,1 +1,154 @@
 
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記念日登録</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+</head>
+<body>
+    <form class="w-75 mx-auto">
+        <p class="mt-3">物件名</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="name" placeholder="" required>
+        </div>
+        <p class="mt-3">月</p>
+        <select class="form-control w-100 mt-1" name="month" required>
+            <option disabled selected>選択してください</option>
+            <option value="1">１月</option>
+            <option value="2">２月</option>
+            <option value="3">３月</option>
+            <option value="4">４月</option>
+            <option value="5">５月</option>
+            <option value="6">６月</option>
+            <option value="7">７月</option>
+            <option value="8">８月</option>
+            <option value="9">９月</option>
+            <option value="10">１０月</option>
+            <option value="11">１１月</option>
+            <option value="12">１２月</option>
+        </select>
+        <p class="mt-3">日</p>
+        <select class="form-control w-100 mt-1" name="date" required>
+            <option disabled selected>選択してください</option>
+            <option value="1">１日</option>
+            <option value="2">２日</option>
+            <option value="3">３日</option>
+            <option value="4">４日</option>
+            <option value="5">５日</option>
+            <option value="6">６日</option>
+            <option value="7">７日</option>
+            <option value="8">８日</option>
+            <option value="9">９日</option>
+            <option value="10">１０日</option>
+            <option value="11">１１日</option>
+            <option value="12">１２日</option>
+            <option value="13">１３日</option>
+            <option value="14">１４日</option>
+            <option value="15">１５日</option>
+            <option value="16">１６日</option>
+            <option value="17">１７日</option>
+            <option value="18">１８日</option>
+            <option value="19">１９日</option>
+            <option value="20">２０日</option>
+            <option value="21">２１日</option>
+            <option value="22">２２日</option>
+            <option value="23">２３日</option>
+            <option value="24">２４日</option>
+            <option value="25">２５日</option>
+            <option value="26">２６日</option>
+            <option value="27">２７日</option>
+            <option value="28">２８日</option>
+            <option value="29">２９日</option>
+            <option value="30">３０日</option>
+            <option value="31">３１日</option>
+        </select>
+        <p class="mt-3">年（オプション）</p>
+        <select class="form-control w-100 mt-1" name="year" id="year">
+            <option value="2019">令和元年（2019）</option>
+            <option value="2020">令和02年（2020）</option>
+            <option value="2021">令和03年（2021）</option>
+            <option value="2022">令和04年（2022）</option>
+        　　<option value="2023">令和05年（2023）</option>
+            <option value="2024">令和06年（2024）</option>
+            <option value="2025" selected>令和07年（2025）</option>
+        </select>
+
+        <input type="submit" class="mt-4 btn btn-primary" value="送信">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const liffId = "2008361764-YGw9p4R3";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const name  = $('input[name="name"]').val();
+                const month = $('select[name="month"]').val();
+                const date  = $('select[name="date"]').val();
+                const year  = $('select[name="year"]').val();
+                var msg = "";
+                if (year == "") {
+                    msg = "登録" + "\n" +`${name}` + "\n" + "2025" +`${month}` + "/" + `${date}`;
+                }else {
+                    msg = "登録" + "\n" +`${name}` + "\n" + `${year}` + "/" +`${month}` + "/" + `${date}`;
+                }
+                sendText(msg);
+                return false;
+            });
+        });
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectElement = document.getElementById("year");
+            const options = Array.from(selectElement.options);
+            // Reverse the order of options
+            options.reverse();
+            // Remove existing options from select element
+            while (selectElement.firstChild) {
+                selectElement.removeChild(selectElement.firstChild);
+            }
+            // Append reversed options to select element
+            options.forEach(option => {
+                selectElement.appendChild(option);
+            });
+        });
+    </script>
+
+</body>
+</html>
